@@ -89,13 +89,14 @@ def listar_servicios():
     return [{"id": s[0], "nombre": s[1], "costo": s[2]} for s in servicios]
 
 
+
 # Endpoint para registrar usuario
 @app.post("/usuarios/registro")
 def registrar_usuario(usuario: UsuarioRegistro):
     try:
         cursor.execute("INSERT INTO usuarios (correo, contrasena) VALUES (?, ?)", (usuario.correo, usuario.contrasena))
         conn.commit()
-        return {"ok": True, "msg": "Usuario registrado"}
+        return {"ok": True}
     except sqlite3.IntegrityError:
         raise HTTPException(status_code=400, detail="El correo ya está registrado")
 
@@ -109,7 +110,7 @@ def login_usuario(usuario: UsuarioLogin):
     else:
         return {"ok": False, "error": "Credenciales incorrectas"}
 
-# Actualizar endpoint de agregar atención para incluir correo
+# Endpoint para agregar atención (incluye correo)
 @app.post("/atenciones", response_model=AtencionOut)
 def agregar_atencion(atencion: AtencionIn):
     # Verificar que el usuario existe
