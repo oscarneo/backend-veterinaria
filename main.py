@@ -4,7 +4,19 @@ from typing import List
 from datetime import date
 import sqlite3
 
+# CORS
+from fastapi.middleware.cors import CORSMiddleware
+
 app = FastAPI()
+
+# Configuración de CORS
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],  # Cambia esto a los orígenes permitidos en producción
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 # Database setup
 conn = sqlite3.connect('veterinaria.db', check_same_thread=False)
